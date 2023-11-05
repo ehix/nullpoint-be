@@ -5,6 +5,7 @@ const app = express()
 const path = require('path')
 const { logger, logEvents } = require('./middleware/logger')
 const errorHandler = require('./middleware/errorHandler')
+const favicon = require('serve-favicon')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const corsOptions = require('./config/corsOptions')
@@ -15,6 +16,8 @@ const PORT = process.env.PORT || 3500
 console.log(process.env.NODE_ENV)
 
 connectDB()
+
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
 app.use(logger)
 
