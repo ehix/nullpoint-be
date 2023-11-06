@@ -68,3 +68,5 @@ run node, then `require('crypto').randomBytes(64).toString('hex')`
 
 react app is a static site - npm build, build
 the api is a node.js rest api webservice - npm install, npm start 
+
+Grab a token after spinning up backend using /auth/refresh, and pasting into postman (Auth tab + bearer token) with the req.

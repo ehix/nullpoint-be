@@ -42,7 +42,7 @@ const createNewNote = async (req, res) => {
         return res.status(409).json({ message: 'Duplicate note title' })
     }
 
-    // Create and store the new user 
+    // Create and save new note
     const note = await Note.create({ user, title, text })
 
     if (note) { // Created 
@@ -113,6 +113,7 @@ const deleteNote = async (req, res) => {
 
     res.json(reply)
 }
+
 
 module.exports = {
     getAllNotes,

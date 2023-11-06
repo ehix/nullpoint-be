@@ -26,6 +26,9 @@ const noteSchema = new mongoose.Schema(
     }
 )
 
+// This auto increments ticket numbers from 500,
+// which is used to track and ensure uniquness of each note.
+// A ticket field is included in the DB for each note created.
 noteSchema.plugin(AutoIncrement, {
     inc_field: 'ticket',
     id: 'ticketNums',
