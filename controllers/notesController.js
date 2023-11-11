@@ -24,6 +24,27 @@ const getAllNotes = async (req, res) => {
     res.json(notesWithUser)
 }
 
+// @desc Get all completed notes 
+// @route GET /notes/completed
+// @access Private
+const getCompletedNotes = async (req, res) => {
+    // Get all completed notes from MongoDB
+    const notes = await Note.find({ completed: true }).lean();
+
+    // If no notes 
+    if (!notes?.length) {
+        return res.status(400).json({ message: 'No completed notes found' });
+    }
+
+    // Add username to each note before sending the response 
+    const notesWithUser = await Promise.all(notes.map(async (note) => {
+        const user = await User.findById(note.user).lean().exec();
+        return { ...note, username: user.username };
+    }));
+
+    res.json(notesWithUser);
+}
+
 // @desc Create new note
 // @route POST /notes
 // @access Private
@@ -117,6 +138,7 @@ const deleteNote = async (req, res) => {
 
 module.exports = {
     getAllNotes,
+    getCompletedNotes,
     createNewNote,
     updateNote,
     deleteNote
