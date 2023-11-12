@@ -77,8 +77,8 @@ const getCompletedNotes = async (req, res) => {
 // @route POST /notes
 // @access Private
 const createNewNote = async (req, res) => {
-    const { user, title, text } = req.body
-
+    const { user, title, text, completed } = req.body
+    console.log(req.body)
     // Confirm data
     if (!user || !title || !text) {
         return res.status(400).json({ message: 'All fields are required' })
@@ -92,7 +92,7 @@ const createNewNote = async (req, res) => {
     }
 
     // Create and save new note
-    const note = await Note.create({ user, title, text })
+    const note = await Note.create({ user, title, text, completed })
 
     if (note) { // Created 
         return res.status(201).json({ message: 'New note created' })
