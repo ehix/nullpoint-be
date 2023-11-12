@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 const Note = require('../models/Note')
 const User = require('../models/User')
 
@@ -24,9 +26,35 @@ const getAllNotes = async (req, res) => {
     res.json(notesWithUser)
 }
 
+// @desc Get a note by id
+// @route GET /notes/:id
+// @access Public
+const getCompletedNoteById = async (req, res) => {
+    const noteId = req.params.id;
+
+    // Check if noteId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(noteId)) {
+        return res.status(400).json({ message: 'Invalid note id' });
+    }
+
+    // Will only return completed notes
+    const note = await Note.findOne({ _id: noteId, completed: true }).lean();
+
+    // If no note found
+    if (!note) {
+        return res.status(400).json({ message: 'No completed note found with this id' });
+    }
+
+    // Add username to the note before sending the response 
+    const user = await User.findById(note.user).lean().exec();
+    const noteWithUser = { ...note, username: user.username };
+
+    res.json(noteWithUser);
+}
+
 // @desc Get all completed notes 
 // @route GET /notes/completed
-// @access Private
+// @access Public
 const getCompletedNotes = async (req, res) => {
     // Get all completed notes from MongoDB
     const notes = await Note.find({ completed: true }).lean();
@@ -139,6 +167,7 @@ const deleteNote = async (req, res) => {
 module.exports = {
     getAllNotes,
     getCompletedNotes,
+    getCompletedNoteById,
     createNewNote,
     updateNote,
     deleteNote

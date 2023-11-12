@@ -7,4 +7,7 @@ const notesController = require('../controllers/notesController')
 router.route('/')
     .get(notesController.getCompletedNotes);
 
+router.route('/:id')
+    .get(notesController.getCompletedNoteById);
+
 module.exports = router
