@@ -53,11 +53,14 @@ const getCompletedNoteById = async (req, res) => {
 }
 
 // @desc Get all completed notes 
-// @route GET /notes/completed
+// @route GET /published
 // @access Public
 const getCompletedNotes = async (req, res) => {
-    // Get all completed notes from MongoDB
-    const notes = await Note.find({ completed: true }).lean();
+    // Get the 4 most recent completed notes from MongoDB
+    const notes = await Note.find({ completed: true })
+        .sort({ createdAt: -1 }) // Sort by creation date in descending order
+        .limit(4) // Only return the top 4
+        .lean();
 
     // If no notes 
     if (!notes?.length) {
